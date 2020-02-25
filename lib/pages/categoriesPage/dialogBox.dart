@@ -2,19 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:innovation_flutter_app/bloc/categoryBloc.dart';
 import 'package:innovation_flutter_app/models/category.dart';
 import 'package:innovation_flutter_app/utils/app_constant.dart';
-import 'package:innovation_flutter_app/utils/color_utils.dart';
 import 'package:provider/provider.dart';
 
 class CategoryFormDialog extends StatefulWidget {
+  final Category category;
+
+  const CategoryFormDialog({Key key, this.category}) : super(key: key);
+
   @override
   _CategoryFormDialogState createState() => _CategoryFormDialogState();
 }
 
 class _CategoryFormDialogState extends State<CategoryFormDialog> {
+  bool _isUpdating = false;
   final TextEditingController _name = TextEditingController();
   int _selectedIcon = 0;
   int _selectedColor = 0;
   bool _nameValid = true;
+
+  @override
+  void initState() {
+    if (widget.category != null) {
+      _isUpdating = true;
+      _name.text = widget.category.title;
+      _selectedIcon = AppConstant.ICON_DATA.indexOf(widget.category.icon);
+      _selectedColor =
+          AppConstant.COLOR_VALUES.indexOf(widget.category.color.value);
+    }
+    super.initState();
+  }
 
   void _saveCategory() {
     if (_name.text.isEmpty) {
@@ -25,9 +41,15 @@ class _CategoryFormDialogState extends State<CategoryFormDialog> {
     }
     String categoryName = _name.text;
     IconData iconData = AppConstant.ICON_DATA[_selectedIcon];
-    Color color = Color(ColorUtil.colorsPalettes[_selectedColor].colorValue);
-    Provider.of<CategoryBloc>(context, listen: false)
-        .insertCategory(new Category(categoryName, iconData, color));
+    Color color = Color(AppConstant.COLOR_VALUES[_selectedColor]);
+    if (!_isUpdating) {
+      Provider.of<CategoryBloc>(context, listen: false)
+          .insertCategory(new Category(categoryName, iconData, color));
+    } else {
+      Provider.of<CategoryBloc>(context, listen: false).updateCategory(
+          new Category.update(
+              widget.category.id, categoryName, iconData, color));
+    }
     Navigator.pop(context);
   }
 
@@ -41,7 +63,7 @@ class _CategoryFormDialogState extends State<CategoryFormDialog> {
         padding: EdgeInsets.all(10.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
-          color: Color(ColorUtil.colorsPalettes[_selectedColor].colorValue),
+          color: Color(AppConstant.COLOR_VALUES[_selectedColor]),
         ),
         child: Container(
           height: 350,
@@ -83,7 +105,7 @@ class _CategoryFormDialogState extends State<CategoryFormDialog> {
                 height: 60,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: ColorUtil.colorsPalettes.length,
+                  itemCount: AppConstant.COLOR_VALUES.length,
                   itemBuilder: (_, index) => InkWell(
                     onTap: () {
                       setState(() {
@@ -105,8 +127,7 @@ class _CategoryFormDialogState extends State<CategoryFormDialog> {
                       ),
                       child: Container(
                         decoration: BoxDecoration(
-                          color:
-                              Color(ColorUtil.colorsPalettes[index].colorValue),
+                          color: Color(AppConstant.COLOR_VALUES[index]),
                           shape: BoxShape.circle,
                         ),
                       ),

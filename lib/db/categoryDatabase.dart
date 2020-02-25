@@ -26,4 +26,16 @@ class CategoryDatabase {
     var result = db.insert(Category.tblCategory, category.toMap());
     return result;
   }
+
+  Future<int> updateCategory(Category category) async {
+    Database db = await _appDatabase.getDb();
+    return db.update(Category.tblCategory, category.toMap(),
+        where: "${Category.dbId} = ?", whereArgs: [category.id]);
+  }
+
+  Future<int> deleteCategory(int categoryId) async {
+    Database db = await _appDatabase.getDb();
+    return db.delete(Category.tblCategory,
+        where: "${Category.dbId} = ?", whereArgs: [categoryId]);
+  }
 }

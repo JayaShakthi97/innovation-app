@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:innovation_flutter_app/bloc/editTaskBloc.dart';
 import 'package:innovation_flutter_app/models/task.dart';
+import 'package:innovation_flutter_app/utils/route_util.dart';
+import 'package:provider/provider.dart';
 
 class TaskListItem extends StatefulWidget {
   final Task task;
@@ -25,6 +28,15 @@ class _TaskListItemState extends State<TaskListItem> {
       Text(
         widget.task.title,
         style: TextStyle(decoration: td),
+      ),
+      Expanded(
+        child: IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () {
+              Provider.of<EditTaskBloc>(context, listen: false)
+                  .selectTask(widget.task);
+              RouteUtil.createTaskPage(context, updating: true);
+            }),
       ),
     ]);
   }

@@ -4,6 +4,7 @@ import 'package:innovation_flutter_app/pages/addTask/createTaskPage.dart';
 import 'package:innovation_flutter_app/pages/categoriesPage/categoriesView.dart';
 import 'package:innovation_flutter_app/pages/categoriesPage/insertCategory.dart';
 import 'package:innovation_flutter_app/pages/categoryFullView/categoryFullViewPage.dart';
+import 'package:innovation_flutter_app/pages/home/home.dart';
 
 class RouteUtil {
   static void categoryFullViewPage(
@@ -19,11 +20,11 @@ class RouteUtil {
     );
   }
 
-  static void createTaskPage(BuildContext context) {
+  static void createTaskPage(BuildContext context, {bool updating}) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CreateTaskPage(),
+        builder: (context) => CreateTaskPage(isUpdating: updating),
       ),
     );
   }
@@ -42,6 +43,15 @@ class RouteUtil {
       context,
       MaterialPageRoute(
         builder: (context) => InsertCategoryPage(),
+      ),
+    );
+  }
+
+  static void homePage(BuildContext context) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HomePage(),
       ),
     );
   }

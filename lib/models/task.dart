@@ -15,6 +15,8 @@ class Task {
   DateTime remindAt;
   bool done;
   int categoryId;
+  int selectedCategoryIndex = 0;
+  int selectedDayIndex = 0;
 
   Task(
       {this.id,
@@ -34,4 +36,14 @@ class Task {
     this.done = map[dbDone] == 0 ? false : true;
     this.categoryId = map[dbCategoryID];
   }
+
+  Map<String, dynamic> toMap() => {
+        dbId: this.id,
+        dbTitle: this.title,
+        dbComment: this.comment,
+        dbDueAt: this.dueAt.millisecondsSinceEpoch,
+        dbRemindAt: this.remindAt.millisecondsSinceEpoch,
+        dbDone: this.done == true ? 1 : 0,
+        dbCategoryID: this.categoryId
+      };
 }

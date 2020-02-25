@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:innovation_flutter_app/bloc/editTaskBloc.dart';
 import 'package:innovation_flutter_app/models/category.dart';
 import 'package:innovation_flutter_app/models/task.dart';
 import 'package:innovation_flutter_app/pages/categoryFullView/dayTaskList.dart';
@@ -6,6 +7,7 @@ import 'package:innovation_flutter_app/utils/app_constant.dart';
 import 'package:innovation_flutter_app/utils/route_util.dart';
 import 'package:innovation_flutter_app/widgets/bodyContainer.dart';
 import 'package:innovation_flutter_app/widgets/categoryIcon.dart';
+import 'package:provider/provider.dart';
 
 class CategoryFullViewPage extends StatefulWidget {
   final Category category;
@@ -26,7 +28,7 @@ class _CategoryFullViewPageState extends State<CategoryFullViewPage> {
   @override
   void initState() {
     todays = [
-      Task(title: 'Task One', done: false),
+      Task(title: 'Task One', comment: 'Comment one', done: false),
       Task(title: 'Task Two', done: true),
       Task(title: 'Task Three', done: false)
     ];
@@ -120,7 +122,10 @@ class _CategoryFullViewPageState extends State<CategoryFullViewPage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         heroTag: 'createBtn',
-        onPressed: () => RouteUtil.createTaskPage(context),
+        onPressed: () {
+          Provider.of<EditTaskBloc>(context, listen: false).selectTask(Task());
+          RouteUtil.createTaskPage(context);
+        },
         label: Text('Add Task'),
         icon: Icon(Icons.add),
       ),

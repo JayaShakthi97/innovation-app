@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:innovation_flutter_app/utils/app_constant.dart';
 
 class Category {
   static final tblCategory = "categories";
@@ -7,32 +8,29 @@ class Category {
   static final dbIcon = "icon";
   static final dbColorCode = "colorCode";
 
-  static final List<IconData> iconList = [
-    Icons.person,
-    Icons.work,
-    Icons.school,
-    Icons.comment,
-  ];
-
   int _id;
   String _title;
   IconData _icon;
   Color _color;
+  bool _expanded;
 
   Category(this._title, this._icon, this._color);
+
+  Category.update(this._id, this._title, this._icon, this._color);
 
   Category.fromMap(Map<String, dynamic> map) {
     this._id = map[dbId];
     this._title = map[dbTitle];
-    this._icon = iconList[map[dbIcon]];
+    this._icon = AppConstant.ICON_DATA[map[dbIcon]];
     this._color = Color(map[dbColorCode]);
+    this._expanded = false;
   }
 
   Map<String, dynamic> toMap() => {
         dbId: this._id,
         dbTitle: this._title,
         dbColorCode: this._color.value,
-        dbIcon: iconList.indexOf(this._icon),
+        dbIcon: AppConstant.ICON_DATA.indexOf(this._icon),
       };
 
   int get id => _id;
@@ -57,5 +55,11 @@ class Category {
 
   set title(String value) {
     _title = value;
+  }
+
+  bool get isExpanded => _expanded;
+
+  set expanded(bool value) {
+    _expanded = value;
   }
 }

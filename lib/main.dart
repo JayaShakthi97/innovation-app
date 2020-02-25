@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:innovation_flutter_app/bloc/categoryBloc.dart';
-import 'package:innovation_flutter_app/pages/home/home.dart';
+import 'package:innovation_flutter_app/bloc/editTaskBloc.dart';
+import 'package:innovation_flutter_app/pages/splashScreen.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());
@@ -12,6 +13,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => CategoryBloc(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => EditTaskBloc(),
         )
       ],
       child: MaterialApp(
@@ -22,7 +26,7 @@ class MyApp extends StatelessWidget {
               color: Colors.transparent,
               elevation: 0.0,
             )),
-        home: HomePage(),
+        home: SplashScreen(),
       ),
     );
   }

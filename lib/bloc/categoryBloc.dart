@@ -23,6 +23,18 @@ class CategoryBloc with ChangeNotifier {
     getCategories();
   }
 
+  updateCategory(Category category) async {
+    this.loading = true;
+    await _categoryRepository.updateCategory(category);
+    getCategories();
+  }
+
+  deleteCategory(int id) async {
+    this.loading = true;
+    await _categoryRepository.deleteCategory(id);
+    getCategories();
+  }
+
   set loading(bool value) {
     this._loading = value;
     notifyListeners();

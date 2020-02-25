@@ -11,6 +11,7 @@ class AppConstant {
   static const double FONT_VERY_SMALL = 4.0;
   static const double FONT_SMALL = 8.0;
   static const double FONT_MEDIUM = 16.0;
+  static const double FONT_MEDIUM_LARGE = 20.0;
   static const double FONT_LARGE = 24.0;
   static const double FONT_VERY_LARGE = 32.0;
 
@@ -30,5 +31,17 @@ class AppConstant {
     Icons.drive_eta,
     Icons.fastfood,
     Icons.home,
+  ];
+
+  static final List<int> COLOR_VALUES = [
+    Colors.blue.value,
+    Colors.red.value,
+    Colors.pink.value,
+    Colors.purple.value,
+    Colors.green.value,
+    Colors.yellow.value,
+    Colors.orange.value,
+    Colors.deepOrange.value,
+    Colors.brown.value
   ];
 }
