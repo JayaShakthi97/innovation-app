@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:innovation_flutter_app/bloc/categoryBloc.dart';
 import 'package:innovation_flutter_app/bloc/editTaskBloc.dart';
+import 'package:innovation_flutter_app/bloc/taskBloc.dart';
 import 'package:innovation_flutter_app/models/category.dart';
 import 'package:innovation_flutter_app/models/task.dart';
 import 'package:innovation_flutter_app/pages/categoryFullView/dayTaskList.dart';
@@ -95,7 +97,9 @@ class _CategoryFullViewPageState extends State<CategoryFullViewPage> {
                   child: this.todays.length > 0
                       ? DayTaskList(
                           day: 'Today',
-                          taskList: this.todays,
+                          taskList:
+                              Provider.of<TaskBloc>(context, listen: false)
+                                  .todayTasksList,
                         )
                       : null,
                 ),
@@ -103,7 +107,9 @@ class _CategoryFullViewPageState extends State<CategoryFullViewPage> {
                   child: this.tomorrows.length > 0
                       ? DayTaskList(
                           day: 'Tomorrow',
-                          taskList: this.tomorrows,
+                          taskList:
+                              Provider.of<TaskBloc>(context, listen: false)
+                                  .tomorrowTasksList,
                         )
                       : null,
                 ),
@@ -111,7 +117,9 @@ class _CategoryFullViewPageState extends State<CategoryFullViewPage> {
                   child: this.upcomings.length > 0
                       ? DayTaskList(
                           day: 'Upcoming',
-                          taskList: this.upcomings,
+                          taskList:
+                              Provider.of<TaskBloc>(context, listen: false)
+                                  .upcomingTasksList,
                         )
                       : null,
                 ),
@@ -123,7 +131,9 @@ class _CategoryFullViewPageState extends State<CategoryFullViewPage> {
       floatingActionButton: FloatingActionButton.extended(
         heroTag: 'createBtn',
         onPressed: () {
-          Provider.of<EditTaskBloc>(context, listen: false).selectTask(Task());
+          Provider.of<EditTaskBloc>(context, listen: false).selectTask(
+              Task(dueAt: DateTime.now(), categoryId: 1),
+              Provider.of<CategoryBloc>(context, listen: false).categories);
           RouteUtil.createTaskPage(context);
         },
         label: Text('Add Task'),

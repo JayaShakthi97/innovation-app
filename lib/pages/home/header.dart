@@ -43,6 +43,10 @@ class Header extends StatelessWidget {
                       value: 0,
                       child: Text("Manage Categories"),
                     ),
+                    PopupMenuItem<int>(
+                      value: 1,
+                      child: Text("Google Signin"),
+                    ),
                   ];
                 }),
           ]),

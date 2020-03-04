@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:innovation_flutter_app/bloc/taskBloc.dart';
 import 'package:innovation_flutter_app/models/category.dart';
 import 'package:innovation_flutter_app/models/task.dart';
+import 'package:innovation_flutter_app/pages/categoryFullView/dayTaskList.dart';
 import 'package:innovation_flutter_app/utils/app_constant.dart';
 import 'package:innovation_flutter_app/widgets/categoryIcon.dart';
 import 'package:innovation_flutter_app/widgets/doneIcon.dart';
 import 'package:innovation_flutter_app/widgets/progressBar.dart';
+import 'package:provider/provider.dart';
 
 class CustomPage extends StatefulWidget {
   final Category category;
-  final String day;
   final bool active;
-  final VoidCallback onPressed;
 
-  CustomPage({Key key, this.category, this.active, this.onPressed, this.day})
-      : super(key: key);
+  CustomPage({Key key, this.category, this.active}) : super(key: key);
 
   @override
   _CustomPageState createState() => _CustomPageState();
@@ -35,85 +35,83 @@ class _CustomPageState extends State<CustomPage> {
     final double offset = widget.active ? 10 : 0;
     final double top = widget.active ? 10 : 170;
 
-    return InkWell(
-      onTap: widget.onPressed,
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 500),
-        curve: Curves.easeOutQuint,
-        margin: EdgeInsets.only(top: top, bottom: 30, right: 30),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black87,
-                  blurRadius: blur,
-                  offset: Offset(offset, offset))
-            ]),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 500),
+      curve: Curves.easeOutQuint,
+      margin: EdgeInsets.only(top: top, bottom: 30, right: 30),
+      padding: EdgeInsets.only(bottom: 8.0),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black87,
+                blurRadius: blur,
+                offset: Offset(offset, offset))
+          ]),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
+          Widget>[
+        Row(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(10),
+              child: CategoryIcon(
+                icon: this.widget.category.icon,
+                color: this.widget.category.color,
+              ),
+            ),
+            Container(
+              child: Text(
+                this.widget.category.title,
+                style: TextStyle(
+                  fontSize: AppConstant.FONT_LARGE,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ),
+          ],
+        ),
+        CategoryProgress(
+            category: widget.category,
+            total: this.taskList.length,
+            completed: this.completed),
+        Expanded(
+          child: Container(
+            child: ListView(children: <Widget>[
               Container(
-                padding: EdgeInsets.all(10),
-                child: Hero(
-                  tag: widget.category.title + widget.day,
-                  child: CategoryIcon(
-                    icon: this.widget.category.icon,
-                    color: this.widget.category.color,
+                child: Consumer<TaskBloc>(
+                  builder: (_, taskBloc, __) => DayTaskList(
+                    day: 'Today',
+                    taskList: taskBloc.todayTasksList
+                        .where((task) => task.categoryId == widget.category.id)
+                        .toList(),
                   ),
                 ),
               ),
-              Expanded(
-                child: Container(
-                  child: this.taskList.length > 0 ? ListView.builder(
-                      itemCount: this.taskList.length,
-                      itemBuilder: (context, index) {
-                        Task task = this.taskList[index];
-                        TextDecoration td =
-                            task.done ? TextDecoration.lineThrough : null;
-                        return Row(children: <Widget>[
-                          Checkbox(
-                              value: task.done,
-                              onChanged: (val) {
-                                setState(() {
-                                  task.done = val;
-                                });
-                              }),
-                          Text(
-                            task.title,
-                            style: TextStyle(decoration: td),
-                          ),
-                        ]);
-                      }) : Center(
-                    child: DoneIcon(),
+              Container(
+                child: Consumer<TaskBloc>(
+                  builder: (_, taskBloc, __) => DayTaskList(
+                    day: 'Tomorrow',
+                    taskList: taskBloc.tomorrowTasksList
+                        .where((task) => task.categoryId == widget.category.id)
+                        .toList(),
                   ),
                 ),
               ),
               Container(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Hero(
-                        tag: widget.category.title + widget.day + 'title',
-                        child: Container(
-                          child: Text(
-                            this.widget.category.title,
-                            style: TextStyle(
-                              fontSize: AppConstant.FONT_LARGE,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        ),
-                      ),
-                      CategoryProgress(
-                          category: widget.category,
-                          total: this.taskList.length,
-                          completed: this.completed),
-                    ]),
+                child: Consumer<TaskBloc>(
+                  builder: (_, taskBloc, __) => DayTaskList(
+                    day: 'Upcoming',
+                    taskList: taskBloc.upcomingTasksList
+                        .where((task) => task.categoryId == widget.category.id)
+                        .toList(),
+                  ),
+                ),
               ),
             ]),
-      ),
+          ),
+        ),
+      ]),
     );
   }
 }

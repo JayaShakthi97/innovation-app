@@ -4,6 +4,8 @@ import 'package:innovation_flutter_app/pages/addTask/createTaskPage.dart';
 import 'package:innovation_flutter_app/pages/categoriesPage/categoriesView.dart';
 import 'package:innovation_flutter_app/pages/categoriesPage/insertCategory.dart';
 import 'package:innovation_flutter_app/pages/categoryFullView/categoryFullViewPage.dart';
+import 'package:innovation_flutter_app/pages/chat/chatPage.dart';
+import 'package:innovation_flutter_app/pages/chat/personPage.dart';
 import 'package:innovation_flutter_app/pages/home/home.dart';
 
 class RouteUtil {
@@ -52,6 +54,26 @@ class RouteUtil {
       context,
       MaterialPageRoute(
         builder: (context) => HomePage(),
+      ),
+    );
+  }
+
+  static void chatPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChatPage(),
+      ),
+    );
+  }
+
+  static void personPage(BuildContext context, String name) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PersonPage(
+          name: name,
+        ),
       ),
     );
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:innovation_flutter_app/bloc/categoryBloc.dart';
+import 'package:innovation_flutter_app/bloc/chatBloc.dart';
 import 'package:innovation_flutter_app/bloc/editTaskBloc.dart';
+import 'package:innovation_flutter_app/bloc/taskBloc.dart';
 import 'package:innovation_flutter_app/pages/splashScreen.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +18,12 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => EditTaskBloc(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => TaskBloc(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ChatBloc(),
         )
       ],
       child: MaterialApp(

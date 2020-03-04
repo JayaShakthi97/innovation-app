@@ -7,17 +7,41 @@ class TaskDatabase {
 
   AppDatabase _appDatabase;
 
-  //private internal constructor to make it singleton
   TaskDatabase._internal(this._appDatabase);
 
   static TaskDatabase get() {
     return _taskDb;
   }
 
-  Future<List<Task>> getTasks() async {
+  Future<List<Task>> getTasks(int day) async {
     Database db = await _appDatabase.getDb();
-    var result = await db.rawQuery("SELECT * FROM ${Task.tblTask}");
-    return result.map((data) => Task.fromMap(data)).toList();
+    DateTime today =
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    if (day == 0) {
+      var result = await db.rawQuery("SELECT * FROM ${Task.tblTask}");
+      return result.map((data) => Task.fromMap(data)).toList();
+    } else if (day == 1) {
+      var result = await db.query(Task.tblTask,
+          where: "${Task.dbDueAt} >= ? and ${Task.dbDueAt} < ?",
+          whereArgs: [
+            today.millisecondsSinceEpoch,
+            today.add(Duration(days: 1)).millisecondsSinceEpoch
+          ]);
+      return result.map((data) => Task.fromMap(data)).toList();
+    } else if (day == 2) {
+      var result = await db.query(Task.tblTask,
+          where: "${Task.dbDueAt} >= ? and ${Task.dbDueAt} < ?",
+          whereArgs: [
+            today.add(Duration(days: 1)).millisecondsSinceEpoch,
+            today.add(Duration(days: 2)).millisecondsSinceEpoch
+          ]);
+      return result.map((data) => Task.fromMap(data)).toList();
+    } else {
+      var result = await db.query(Task.tblTask,
+          where: "${Task.dbDueAt} >= ?",
+          whereArgs: [today.add(Duration(days: 2)).millisecondsSinceEpoch]);
+      return result.map((data) => Task.fromMap(data)).toList();
+    }
   }
 
   Future<int> insertTask(Task task) async {

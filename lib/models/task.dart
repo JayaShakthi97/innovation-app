@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Task {
   static final tblTask = "Tasks";
   static final dbId = "id";
@@ -17,6 +19,7 @@ class Task {
   int categoryId;
   int selectedCategoryIndex = 0;
   int selectedDayIndex = 0;
+  TimeOfDay pickedTime;
 
   Task(
       {this.id,
@@ -24,7 +27,7 @@ class Task {
       this.comment,
       this.dueAt,
       this.remindAt,
-      this.done,
+      this.done = false,
       this.categoryId});
 
   Task.fromMap(Map<String, dynamic> map) {
@@ -32,7 +35,9 @@ class Task {
     this.title = map[dbTitle];
     this.comment = map[dbComment];
     this.dueAt = DateTime.fromMillisecondsSinceEpoch(map[dbDueAt]);
-    this.remindAt = DateTime.fromMillisecondsSinceEpoch(map[dbRemindAt]);
+    this.remindAt = map[dbRemindAt] == null
+        ? null
+        : DateTime.fromMillisecondsSinceEpoch(map[dbRemindAt]);
     this.done = map[dbDone] == 0 ? false : true;
     this.categoryId = map[dbCategoryID];
   }
@@ -42,8 +47,14 @@ class Task {
         dbTitle: this.title,
         dbComment: this.comment,
         dbDueAt: this.dueAt.millisecondsSinceEpoch,
-        dbRemindAt: this.remindAt.millisecondsSinceEpoch,
+        dbRemindAt:
+            this.remindAt == null ? null : this.remindAt.millisecondsSinceEpoch,
         dbDone: this.done == true ? 1 : 0,
         dbCategoryID: this.categoryId
       };
+
+  @override
+  String toString() {
+    return 'Task{id: $id, title: $title, comment: $comment, dueAt: $dueAt, remindAt: $remindAt, done: $done, categoryId: $categoryId, selectedCategoryIndex: $selectedCategoryIndex, selectedDayIndex: $selectedDayIndex, pickedTime: $pickedTime}';
+  }
 }
