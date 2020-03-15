@@ -42,11 +42,6 @@ class _GoogleProfilePageState extends State<GoogleProfilePage> {
     print("User Sign Out");
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
